@@ -67,24 +67,19 @@
         {
             var depth = 0;
             var horizontalPosition = 0;
+            var cmdImplementation = new Dictionary<CommandType, Action<int>>()
+            {
+                {CommandType.Forward, cmdValue => horizontalPosition += cmdValue },
+                {CommandType.Down, cmdValue => depth += cmdValue },
+                {CommandType.Up, cmdValue => depth -= cmdValue }
+            };
 
             if (commands != null)
             {
                 foreach (var command in commands)
                 {
                     (CommandType cmdType, int cmdValue) = ParseCommand(command);
-                    switch (cmdType)
-                    {
-                        case CommandType.Forward:
-                            horizontalPosition += cmdValue;
-                            break;
-                        case CommandType.Down:
-                            depth += cmdValue;
-                            break;
-                        case CommandType.Up:
-                            depth -= cmdValue;
-                            break;
-                    }
+                    cmdImplementation[cmdType].Invoke(cmdValue);
                 }
             }
 
@@ -96,25 +91,19 @@
             var depth = 0;
             var horizontalPosition = 0;
             var aim = 0;
+            var cmdImplementation = new Dictionary<CommandType, Action<int>>()
+            {
+                {CommandType.Forward, cmdValue => { horizontalPosition += cmdValue; depth += aim * cmdValue; } },
+                {CommandType.Down, cmdValue => aim += cmdValue },
+                {CommandType.Up, cmdValue => aim -= cmdValue }
+            };
 
             if (commands != null)
             {
                 foreach (var command in commands)
                 {
                     (CommandType cmdType, int cmdValue) = ParseCommand(command);
-                    switch (cmdType)
-                    {
-                        case CommandType.Forward:
-                            horizontalPosition += cmdValue;
-                            depth += aim * cmdValue;
-                            break;
-                        case CommandType.Down:
-                            aim += cmdValue;
-                            break;
-                        case CommandType.Up:
-                            aim -= cmdValue;
-                            break;
-                    }
+                    cmdImplementation[cmdType].Invoke(cmdValue);
                 }
             }
 
