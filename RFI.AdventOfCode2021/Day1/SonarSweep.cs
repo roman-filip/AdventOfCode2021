@@ -76,9 +76,9 @@
             if (measurements?.Count() > 1)
             {
                 var m = measurements.ToArray();
-                for (int i = 1; i < m.Length; i++)
+                for (int i = 0; i < m.Length - 1; i++)
                 {
-                    if (m[i] > m[i - 1])
+                    if (m[i] < m[i + 1])
                     {
                         count++;
                     }
