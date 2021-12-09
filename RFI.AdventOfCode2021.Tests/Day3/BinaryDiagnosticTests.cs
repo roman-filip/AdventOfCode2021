@@ -37,5 +37,47 @@ namespace RFI.AdventOfCode2021.Day3.Tests
             var result = _binaryDiagnostic.Diagnose(_realInput);
             Assert.AreEqual(4147524, result);
         }
+
+        [TestMethod()]
+        public void Diagnose2Test_TrainingInput()
+        {
+            var result = _binaryDiagnostic.Diagnose2(_trainingInput);
+            Assert.AreEqual(198, result);
+        }
+
+        [TestMethod()]
+        public void Diagnose2Test_RealInput()
+        {
+            var result = _binaryDiagnostic.Diagnose2(_realInput);
+            Assert.AreEqual(4147524, result);
+        }
+
+        [TestMethod()]
+        public void GetLifeSupportRatingTest_NullInput()
+        {
+            var result = _binaryDiagnostic.GetLifeSupportRating(null);
+            Assert.AreEqual(0, result);
+        }
+
+        [TestMethod()]
+        public void GetLifeSupportRatingTest_EmptyInput()
+        {
+            var result = _binaryDiagnostic.GetLifeSupportRating(Array.Empty<string>());
+            Assert.AreEqual(0, result);
+        }
+
+        [TestMethod()]
+        public void GetLifeSupportRatingTest_TrainingInput()
+        {
+            var result = _binaryDiagnostic.GetLifeSupportRating(_trainingInput);
+            Assert.AreEqual(230, result);
+        }
+
+        [TestMethod()]
+        public void GetLifeSupportRatingTest_RealInput()
+        {
+            var result = _binaryDiagnostic.GetLifeSupportRating(_realInput);
+            Assert.AreEqual(3570354, result);
+        }
     }
 }
