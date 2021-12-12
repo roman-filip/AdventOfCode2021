@@ -18,4 +18,13 @@
     <ProjectReference Include="..\RFI.AdventOfCode2021\RFI.AdventOfCode2021.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Day4\RealInput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Day4\TrainingInput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
