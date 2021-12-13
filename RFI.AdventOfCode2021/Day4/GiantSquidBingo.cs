@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RFI.AdventOfCode2021.Day4
+﻿namespace RFI.AdventOfCode2021.Day4
 {
     /// --- Day 4: Giant Squid ---
     /// 
@@ -66,12 +60,19 @@ namespace RFI.AdventOfCode2021.Day4
         public int Play(IEnumerable<string> gameConfiguration)
         {
             var configuration = gameConfiguration.ToList();
-            var drawnNumbers = configuration[0].Split(',').Select(n => Int32.Parse(n));
+
+            var drawnNumbers = configuration[0].Split(',').Select(n => int.Parse(n));
             var bingoBoards = CreateBingoBoards(configuration);
 
             foreach (var drawnNumber in drawnNumbers)
             {
                 Parallel.ForEach(bingoBoards, bingoBoard => bingoBoard.MarkNumber(drawnNumber));
+
+                var boardsWithBing = bingoBoards.Where(bb => bb.IsBingo()).ToList();
+                if (boardsWithBing.Any())
+                {
+                    return boardsWithBing.Max(b => b.GetScore());
+                }
             }
 
             return 0;
@@ -86,16 +87,31 @@ namespace RFI.AdventOfCode2021.Day4
             {
                 if (string.IsNullOrEmpty(configuration[i]))
                 {
-                    bingoBoards.Add(new BingoBoard(boardNumbers.ToArray()));
+                    bingoBoards.Add(new BingoBoard(GetBingoBoardNumbers(boardNumbers)));
                     boardNumbers.Clear();
                 }
                 else
                 {
-                    boardNumbers.Add(configuration[i].Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(n => Int32.Parse(n)).ToArray());
+                    boardNumbers.Add(configuration[i].Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(n => int.Parse(n)).ToArray());
                 }
             }
 
             return bingoBoards;
+        }
+
+        private int[,] GetBingoBoardNumbers(List<int[]> boardNumbers)
+        {
+            var bn = new int[boardNumbers.Count, boardNumbers[0].Count()];
+
+            for (int x = 0; x < boardNumbers.Count; x++)
+            {
+                for (int y = 0; y < boardNumbers[x].Count(); y++)
+                {
+                    bn[x, y] = boardNumbers[x][y];
+                }
+            }
+
+            return bn;
         }
     }
 }

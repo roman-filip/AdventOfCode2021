@@ -19,7 +19,7 @@ namespace RFI.AdventOfCode2021.Day4.Tests
         public void PlayTest_RealInput()
         {
             var result = _giantSquidBingo.Play(File.ReadAllLines(@"Day4\RealInput.txt"));
-            Assert.AreEqual(666, result);
+            Assert.AreEqual(34506, result);
         }
     }
 }
