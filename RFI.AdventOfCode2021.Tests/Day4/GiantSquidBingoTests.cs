@@ -21,5 +21,19 @@ namespace RFI.AdventOfCode2021.Day4.Tests
             var result = _giantSquidBingo.Play(File.ReadAllLines(@"Day4\RealInput.txt"));
             Assert.AreEqual(34506, result);
         }
+
+        [TestMethod()]
+        public void PlayWhenLastBoardWins_TrainingInput()
+        {
+            var result = _giantSquidBingo.PlayWhenLastBoardWins(File.ReadAllLines(@"Day4\TrainingInput.txt"));
+            Assert.AreEqual(1924, result);
+        }
+
+        [TestMethod()]
+        public void PlayWhenLastBoardWins_RealInput()
+        {
+            var result = _giantSquidBingo.PlayWhenLastBoardWins(File.ReadAllLines(@"Day4\RealInput.txt"));
+            Assert.AreEqual(7686, result);
+        }
     }
 }
