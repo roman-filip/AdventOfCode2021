@@ -50,13 +50,45 @@
         public int GetOverlapsCount(IEnumerable<string> ventLines)
         {
             var lines = new List<VentLine>(ventLines.Count());
-
             foreach (var ventLine in ventLines)
             {
                 lines.Add(new VentLine(ventLine));
             }
 
-            return -999;
+            var horVerLines = lines.Where(l => l.IsHorizontal() || l.IsVertical()).ToList();
+
+            var maxCol = horVerLines.Max(l => l.GetMaxCoord().Col);
+            var maxRow = horVerLines.Max(l => l.GetMaxCoord().Row);
+            var vents = new int[maxCol + 1, maxRow + 1];
+
+            foreach (var line in horVerLines)
+            {
+                if (line.IsHorizontal())
+                {
+                    for (int col = Math.Min(line.Start.Col, line.End.Col); col <= Math.Max(line.Start.Col, line.End.Col); col++)
+                    {
+                        vents[col, line.Start.Row]++;
+                    }
+                }
+                else if (line.IsVertical())
+                {
+                    for (int row = Math.Min(line.Start.Row, line.End.Row); row <= Math.Max(line.Start.Row, line.End.Row); row++)
+                    {
+                        vents[line.Start.Col, row]++;
+                    }
+                }
+            }
+
+            var overlaps = 0;
+            foreach (var vent in vents)
+            {
+                if (vent > 1)
+                {
+                    overlaps++;
+                }
+            }
+
+            return overlaps;
         }
     }
 }
