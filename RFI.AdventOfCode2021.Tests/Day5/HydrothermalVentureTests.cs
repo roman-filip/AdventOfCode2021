@@ -15,5 +15,13 @@ namespace RFI.AdventOfCode2021.Day5.Tests
         [TestMethod()]
         public void GetOverlapsCountTest_RealInput()
             => Assert.AreEqual(8622, _hydrothermalVenture.GetOverlapsCount(File.ReadAllLines(@"Day5\RealInput.txt")));
+
+        [TestMethod()]
+        public void GetOverlapsWithDiagonalsCountTest_TrainingInput()
+            => Assert.AreEqual(12, _hydrothermalVenture.GetOverlapsWithDiagonalsCount(File.ReadAllLines(@"Day5\TrainingInput.txt")));
+
+        [TestMethod()]
+        public void GetOverlapsWithDiagonalsCountTest_RealInput()
+            => Assert.AreEqual(22037, _hydrothermalVenture.GetOverlapsWithDiagonalsCount(File.ReadAllLines(@"Day5\RealInput.txt")));
     }
 }

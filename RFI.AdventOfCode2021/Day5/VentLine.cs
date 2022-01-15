@@ -30,7 +30,7 @@ namespace RFI.AdventOfCode2021.Day5
         public bool IsVertical()
             => Start.Col == End.Col;
 
-        public (int Col, int Row) GetMaxCoord()
-            => (Math.Max(Start.Col, End.Col), Math.Max(Start.Row, End.Row));
+        public bool IsDiagonal()
+            => Math.Abs(Start.Col - End.Col) == Math.Abs(Start.Row - End.Row);
     }
 }

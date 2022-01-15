@@ -45,40 +45,85 @@
     /// in the diagram with a 2 or larger - a total of 5 points.
     /// 
     /// Consider only horizontal and vertical lines. At how many points do at least two lines overlap?
+    /// 
+    /// --- Part Two ---
+    /// 
+    /// Unfortunately, considering only horizontal and vertical lines doesn't give you the full picture; you need to also consider diagonal lines.
+    /// 
+    /// Because of the limits of the hydrothermal vent mapping system, the lines in your list will only ever be horizontal, vertical, or a diagonal 
+    /// line at exactly 45 degrees.In other words:
+    ///     An entry like 1,1 -> 3,3 covers points 1,1, 2,2, and 3,3.
+    ///     An entry like 9,7 -> 7,9 covers points 9,7, 8,8, and 7,9.
+    /// 
+    /// Considering all lines from the above example would now produce the following diagram:
+    /// 1.1....11.
+    /// .111...2..
+    /// ..2.1.111.
+    /// ...1.2.2..
+    /// .112313211
+    /// ...1.2....
+    /// ..1...1...
+    /// .1.....1..
+    /// 1.......1.
+    /// 222111....
+    /// 
+    /// You still need to determine the number of points where at least two lines overlap.In the above example, this is still anywhere in the diagram
+    /// with a 2 or larger - now a total of 12 points.
+    /// 
+    /// Consider all of the lines.At how many points do at least two lines overlap?
     public class HydrothermalVenture
     {
         public int GetOverlapsCount(IEnumerable<string> ventLines)
+            => GetOverlapsCountInternal(ventLines, l => l.IsHorizontal() || l.IsVertical());
+
+        public int GetOverlapsWithDiagonalsCount(IEnumerable<string> ventLines)
+            => GetOverlapsCountInternal(ventLines, l => l.IsHorizontal() || l.IsVertical() || l.IsDiagonal());
+
+        private int GetOverlapsCountInternal(IEnumerable<string> ventLines, Func<VentLine, bool> predicate)
+        {
+            List<VentLine> lines = CreateVentLines(ventLines, predicate);
+            var vents = CreateVentsArray(lines);
+            MarkVents(lines, vents);
+            return CountOverlaps(vents);
+        }
+
+        private List<VentLine> CreateVentLines(IEnumerable<string> ventLines, Func<VentLine, bool> predicate)
         {
             var lines = new List<VentLine>(ventLines.Count());
             foreach (var ventLine in ventLines)
             {
                 lines.Add(new VentLine(ventLine));
             }
+            return lines.Where(predicate).ToList();
+        }
 
-            var horVerLines = lines.Where(l => l.IsHorizontal() || l.IsVertical()).ToList();
+        private int[,] CreateVentsArray(List<VentLine> lines)
+        {
+            var maxCol = lines.Max(l => Math.Max(l.Start.Col, l.End.Col));
+            var maxRow = lines.Max(l => Math.Max(l.Start.Row, l.End.Row));
+            return new int[maxCol + 1, maxRow + 1];
+        }
 
-            var maxCol = horVerLines.Max(l => l.GetMaxCoord().Col);
-            var maxRow = horVerLines.Max(l => l.GetMaxCoord().Row);
-            var vents = new int[maxCol + 1, maxRow + 1];
-
-            foreach (var line in horVerLines)
+        private void MarkVents(List<VentLine> lines, int[,] vents)
+        {
+            foreach (var line in lines)
             {
-                if (line.IsHorizontal())
+                var colIncrement = line.Start.Col == line.End.Col ? 0 : line.Start.Col < line.End.Col ? 1 : -1;
+                var rowIncrement = line.Start.Row == line.End.Row ? 0 : line.Start.Row < line.End.Row ? 1 : -1;
+                var col = line.Start.Col;
+                var row = line.Start.Row;
+                var lineLength = Math.Max(Math.Abs(line.Start.Col - line.End.Col), Math.Abs(line.Start.Row - line.End.Row));
+                for (int i = 0; i <= lineLength; i++)
                 {
-                    for (int col = Math.Min(line.Start.Col, line.End.Col); col <= Math.Max(line.Start.Col, line.End.Col); col++)
-                    {
-                        vents[col, line.Start.Row]++;
-                    }
-                }
-                else if (line.IsVertical())
-                {
-                    for (int row = Math.Min(line.Start.Row, line.End.Row); row <= Math.Max(line.Start.Row, line.End.Row); row++)
-                    {
-                        vents[line.Start.Col, row]++;
-                    }
+                    vents[col, row]++;
+                    col += colIncrement;
+                    row += rowIncrement;
                 }
             }
+        }
 
+        private int CountOverlaps(int[,] vents)
+        {
             var overlaps = 0;
             foreach (var vent in vents)
             {
@@ -87,7 +132,6 @@
                     overlaps++;
                 }
             }
-
             return overlaps;
         }
     }
