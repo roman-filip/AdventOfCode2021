@@ -55,35 +55,42 @@
     /// In this example, after 18 days, there are a total of 26 fish.After 80 days, there would be a total of 5934.
     /// 
     /// Find a way to simulate lanternfish. How many lanternfish would there be after 80 days?
+    ///
+    /// --- Part Two ---
+    /// 
+    /// Suppose the lanternfish live forever and have unlimited food and space.Would they take over the entire ocean?
+    /// 
+    /// After 256 days in the example above, there would be a total of 26984457539 lanternfish!
+    /// 
+    /// How many lanternfish would there be after 256 days?
     public class Lanternfish
     {
-        public int GetPopulationSize(string initialPopulation, int days)
+        public long GetPopulationSize(string initialPopulation, int days)
         {
-            var fishes = initialPopulation
+            var fishesBegin = new long[9];
+            var fishesEnd = new long[9];
+
+            initialPopulation
                 .Split(',')
                 .Select(lf => Convert.ToInt32(lf))
-                .ToList();
+                .ToList()
+                .ForEach(f => fishesBegin[f]++);
 
             while (days > 0)
             {
-                var fishCount = fishes.Count;
-                for (int i = 0; i < fishCount; i++)
+                fishesEnd = new long[9];
+
+                fishesEnd[8] = fishesEnd[6] = fishesBegin[0];
+                for (int i = 1; i < fishesBegin.Length; i++)
                 {
-                    if (fishes[i] > 0)
-                    {
-                        fishes[i]--;
-                    }
-                    else
-                    {
-                        fishes[i] = 6;
-                        fishes.Add(8);
-                    }
+                    fishesEnd[i - 1] += fishesBegin[i];
                 }
 
+                fishesBegin = fishesEnd;
                 days--;
             }
 
-            return fishes.Count;
+            return fishesEnd.Sum();
         }
     }
 }
