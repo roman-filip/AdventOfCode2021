@@ -1,27 +1,27 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RFI.AdventOfCode2021.Day5;
 
-namespace RFI.AdventOfCode2021.Day5.Tests
+namespace RFI.AdventOfCode2021.Tests.Day5
 {
-    [TestClass()]
+    [TestClass]
     public class HydrothermalVentureTests
     {
+        private const string TRAINING_INPUT = @"Day5\TrainingInput.txt";
+        private const string REAL_INPUT = @"Day5\RealInput.txt";
+
         private readonly HydrothermalVenture _hydrothermalVenture = new();
 
-        [TestMethod()]
-        public void GetOverlapsCountTest_TrainingInput()
-            => Assert.AreEqual(5, _hydrothermalVenture.GetOverlapsCount(File.ReadAllLines(@"Day5\TrainingInput.txt")));
+        [TestMethod]
+        [DataRow(5, TRAINING_INPUT)]
+        [DataRow(8622, REAL_INPUT)]
+        public void GetOverlapsCountTest(int expectedCount, string file)
+            => Assert.AreEqual(expectedCount, _hydrothermalVenture.GetOverlapsCount(File.ReadAllLines(file)));
 
-        [TestMethod()]
-        public void GetOverlapsCountTest_RealInput()
-            => Assert.AreEqual(8622, _hydrothermalVenture.GetOverlapsCount(File.ReadAllLines(@"Day5\RealInput.txt")));
-
-        [TestMethod()]
-        public void GetOverlapsWithDiagonalsCountTest_TrainingInput()
-            => Assert.AreEqual(12, _hydrothermalVenture.GetOverlapsWithDiagonalsCount(File.ReadAllLines(@"Day5\TrainingInput.txt")));
-
-        [TestMethod()]
-        public void GetOverlapsWithDiagonalsCountTest_RealInput()
-            => Assert.AreEqual(22037, _hydrothermalVenture.GetOverlapsWithDiagonalsCount(File.ReadAllLines(@"Day5\RealInput.txt")));
+        [TestMethod]
+        [DataRow(12, TRAINING_INPUT)]
+        [DataRow(22037, REAL_INPUT)]
+        public void GetOverlapsWithDiagonalsCountTest(int expectedCount, string file)
+            => Assert.AreEqual(expectedCount, _hydrothermalVenture.GetOverlapsWithDiagonalsCount(File.ReadAllLines(file)));
     }
 }

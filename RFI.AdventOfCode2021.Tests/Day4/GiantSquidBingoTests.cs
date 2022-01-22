@@ -1,39 +1,33 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RFI.AdventOfCode2021.Day4;
 
-namespace RFI.AdventOfCode2021.Day4.Tests
+namespace RFI.AdventOfCode2021.Tests.Day4
 {
-    [TestClass()]
+    [TestClass]
     public class GiantSquidBingoTests
     {
+        private const string TRAINING_INPUT = @"Day4\TrainingInput.txt";
+        private const string REAL_INPUT = @"Day4\RealInput.txt";
+
         private readonly GiantSquidBingo _giantSquidBingo = new();
 
-        [TestMethod()]
-        public void PlayTest_TrainingInput()
+        [TestMethod]
+        [DataRow(4512, TRAINING_INPUT)]
+        [DataRow(34506, REAL_INPUT)]
+        public void PlayTest(int expectedResult, string file)
         {
-            var result = _giantSquidBingo.Play(File.ReadAllLines(@"Day4\TrainingInput.txt"));
-            Assert.AreEqual(4512, result);
+            var result = _giantSquidBingo.Play(File.ReadAllLines(file));
+            Assert.AreEqual(expectedResult, result);
         }
 
-        [TestMethod()]
-        public void PlayTest_RealInput()
+        [TestMethod]
+        [DataRow(1924, TRAINING_INPUT)]
+        [DataRow(7686, REAL_INPUT)]
+        public void PlayWhenLastBoardWins(int expectedResult, string file)
         {
-            var result = _giantSquidBingo.Play(File.ReadAllLines(@"Day4\RealInput.txt"));
-            Assert.AreEqual(34506, result);
-        }
-
-        [TestMethod()]
-        public void PlayWhenLastBoardWins_TrainingInput()
-        {
-            var result = _giantSquidBingo.PlayWhenLastBoardWins(File.ReadAllLines(@"Day4\TrainingInput.txt"));
-            Assert.AreEqual(1924, result);
-        }
-
-        [TestMethod()]
-        public void PlayWhenLastBoardWins_RealInput()
-        {
-            var result = _giantSquidBingo.PlayWhenLastBoardWins(File.ReadAllLines(@"Day4\RealInput.txt"));
-            Assert.AreEqual(7686, result);
+            var result = _giantSquidBingo.PlayWhenLastBoardWins(File.ReadAllLines(file));
+            Assert.AreEqual(expectedResult, result);
         }
     }
 }
