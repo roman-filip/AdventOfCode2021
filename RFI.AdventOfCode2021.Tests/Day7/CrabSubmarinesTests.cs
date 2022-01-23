@@ -16,5 +16,11 @@ namespace RFI.AdventOfCode2021.Tests.Day7
         [DataRow(355150, REAL_INPUT)]
         public void GetLeastFuelTest(int expectedLeastFuel, string crabSubmarines)
             => Assert.AreEqual(expectedLeastFuel, _crabSubmarines.GetLeastFuel(crabSubmarines));
+
+        [TestMethod]
+        [DataRow(168, TRAINING_INPUT)]
+        [DataRow(98368490, REAL_INPUT)]
+        public void GetLeastFuelForGrowingConsumptionTest(int expectedLeastFuel, string crabSubmarines)
+            => Assert.AreEqual(expectedLeastFuel, _crabSubmarines.GetLeastFuelForGrowingConsumption(crabSubmarines));
     }
 }
