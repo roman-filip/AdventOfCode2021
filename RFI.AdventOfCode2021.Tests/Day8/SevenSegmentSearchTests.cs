@@ -17,5 +17,11 @@ namespace RFI.AdventOfCode2021.Tests.Day8
         [DataRow(409, REAL_INPUT)]
         public void GetCountOf_1_4_7Test(int expectedCount, string file)
             => Assert.AreEqual(expectedCount, _sevenSegmentSearch.GetCountOf_1_4_7_8(File.ReadAllLines(file)));
+
+        [TestMethod]
+        [DataRow(61229, TRAINING_INPUT)]
+        [DataRow(1024649, REAL_INPUT)]
+        public void GetSumOfOutputsTest(int expectedCount, string file)
+            => Assert.AreEqual(expectedCount, _sevenSegmentSearch.GetSumOfOutputs(File.ReadAllLines(file)));
     }
 }

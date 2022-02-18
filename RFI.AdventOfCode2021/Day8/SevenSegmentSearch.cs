@@ -1,4 +1,6 @@
-﻿namespace RFI.AdventOfCode2021.Day8
+﻿using System.Text;
+
+namespace RFI.AdventOfCode2021.Day8
 {
     /// --- Day 8: Seven Segment Search ---
     /// 
@@ -9,6 +11,7 @@
     /// they must have been damaged during the escape. You'll be in a lot of trouble without them, so you'd better figure out what's wrong.
     /// 
     /// Each digit of a seven-segment display is rendered by turning on or off any of seven segments named a through g:
+    /// 
     ///   0:        1:        2:        3:        4:
     ///  aaaa      ....      aaaa      aaaa      ....
     /// b    c    .    c    .    c    .    c    b    c
@@ -17,6 +20,7 @@
     /// e    f    .    f    e    .    .    f    .    f
     /// e    f    .    f    e    .    .    f    .    f
     ///  gggg      ....      gggg      gggg      ....
+    /// 
     /// 
     ///   5:        6:        7:        8:        9:
     ///  aaaa      aaaa      aaaa      aaaa      aaaa
@@ -79,6 +83,59 @@
     /// Counting only digits in the output values (the part after | on each line), in the above example, there are 26 instances of digits that use a unique number of segments (highlighted above).
     /// 
     /// In the output values, how many times do digits 1, 4, 7, or 8 appear?
+    /// 
+    /// --- Part Two ---
+    /// 
+    /// Through a little deduction, you should now be able to determine the remaining digits.Consider again the first example above:
+    /// acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab |
+    /// cdfeb fcadb cdfeb cdbaf
+    /// 
+    /// After some careful analysis, the mapping between signal wires and segments only make sense in the following configuration:
+    /// 
+    ///  dddd
+    /// e    a
+    /// e    a
+    ///  ffff
+    /// g    b
+    /// g    b
+    ///  cccc
+    /// 
+    /// So, the unique signal patterns would correspond to the following digits:
+    ///     acedgfb: 8
+    ///     cdfbe: 5
+    ///     gcdfa: 2
+    ///     fbcad: 3
+    ///     dab: 7
+    ///     cefabd: 9
+    ///     cdfgeb: 6
+    ///     eafb: 4
+    ///     cagedb: 0
+    ///     ab: 1
+    /// 
+    /// Then, the four digits of the output value can be decoded:
+    ///     cdfeb: 5
+    ///     fcadb: 3
+    ///     cdfeb: 5
+    ///     cdbaf: 3
+    /// 
+    /// Therefore, the output value for this entry is 5353.
+    /// 
+    /// Following this same process for each entry in the second, larger example above, the output value of each entry can be determined:
+    /// 
+    ///     fdgacbe cefdb cefbgd gcbe: 8394
+    ///     fcgedb cgb dgebacf gc: 9781
+    ///     cg cg fdcagb cbg: 1197
+    ///     efabcd cedba gadfec cb: 9361
+    ///     gecf egdcabf bgf bfgea: 4873
+    ///     gebdcfa ecba ca fadegcb: 8418
+    ///     cefg dcbef fcge gbcadfe: 4548
+    ///     ed bcgafe cdgba cbgef: 1625
+    ///     gbdfcae bgc cg cgb: 8717
+    ///     fgae cfgab fg bagce: 4315
+    /// 
+    /// Adding all of the output values in this larger example produces 61229.
+    /// 
+    /// For each entry, determine all of the wire/segment connections and decode the four-digit output values.What do you get if you add up all of the output values?
     public class SevenSegmentSearch
     {
         public int GetCountOf_1_4_7_8(string[] signals)
@@ -87,7 +144,73 @@
                    .Select(s => s.Split(' '))
                    .SelectMany(s => s)
                    .Select(s => s.Length)
-                   .Where(l => l == 2 || l == 3 || l == 4 || l == 7)
-                   .Count();
+                   .Count(l => l == 2 || l == 3 || l == 4 || l == 7);
+
+        public int GetSumOfOutputs(string[] signals)
+        {
+            var sum = 0;
+
+            foreach (var signal in signals)
+            {
+                (var inputs, var outputs) = SplitSignal(signal);
+                var mapping = CreateMapping(inputs);
+                sum += GetOutputSignalValue(outputs, mapping);
+            }
+
+            return sum;
+        }
+
+        private (string[] inputs, string[] outputs) SplitSignal(string signal)
+        {
+            var split = signal.Split(" | ");
+            return (split[0].Split(' '), split[1].Split(' '));
+        }
+
+        private Dictionary<string, string> CreateMapping(string[] inputs)
+        {
+            var filteredInputs = inputs
+                .Distinct()
+                .Select(i => string.Concat(i.OrderBy(c => c)))  // Sort the letters in the signal sample
+                .ToList();
+
+            var one = filteredInputs.Where(i => i.Length == 2).Single();
+            var four = filteredInputs.Where(i => i.Length == 4).Single();
+            var seven = filteredInputs.Where(i => i.Length == 3).Single();
+            var eight = filteredInputs.Where(i => i.Length == 7).Single();
+
+            var nine = filteredInputs.Where(i => i.Length == 6 && four.All(f => i.Contains(f))).Single();
+            var zero = filteredInputs.Where(i => i.Length == 6 && i != nine && seven.All(s => i.Contains(s))).Single();
+            var six = filteredInputs.Where(i => i.Length == 6 && i != nine && i != zero).Single();
+
+            var three = filteredInputs.Where(i => i.Length == 5 && seven.All(s => i.Contains(s))).Single();
+            var five = filteredInputs.Where(i => i.Length == 5 && i.All(c => six.Contains(c))).Single();
+            var two = filteredInputs.Where(i => i.Length == 5 && i != three && i != five).Single();
+
+            return new Dictionary<string, string>
+            {
+                { zero, "0" },
+                { one, "1" },
+                { two, "2" },
+                { three, "3" },
+                { four, "4" },
+                { five, "5" },
+                { six, "6" },
+                { seven, "7" },
+                { eight, "8" },
+                { nine, "9" },
+            };
+        }
+
+        private int GetOutputSignalValue(string[] outputs, Dictionary<string, string> mapping)
+        {
+            var sb = new StringBuilder();
+
+            outputs
+                .Select(i => string.Concat(i.OrderBy(c => c)))  // Sort the letters in the signal sample
+                .ToList()
+                .ForEach(output => sb.Append(mapping[output]));
+
+            return int.Parse(sb.ToString());
+        }
     }
 }
