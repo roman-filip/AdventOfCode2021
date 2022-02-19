@@ -1,5 +1,6 @@
 ﻿namespace RFI.AdventOfCode2021.Day6
 {
+    /// <summary>
     /// --- Day 6: Lanternfish ---
     /// 
     /// The sea floor is getting steeper.Maybe the sleigh keys got carried this way?
@@ -63,6 +64,7 @@
     /// After 256 days in the example above, there would be a total of 26984457539 lanternfish!
     /// 
     /// How many lanternfish would there be after 256 days?
+    /// </summary>
     public class Lanternfish
     {
         public long GetPopulationSize(string initialPopulation, int days)

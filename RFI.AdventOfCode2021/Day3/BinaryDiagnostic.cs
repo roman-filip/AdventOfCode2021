@@ -2,6 +2,7 @@
 
 namespace RFI.AdventOfCode2021.Day3
 {
+    /// <summary>
     /// --- Day 3: Binary Diagnostic ---
     /// 
     /// The submarine has been making some odd creaking noises, so you ask it to produce a diagnostic report just in case.
@@ -69,11 +70,12 @@ namespace RFI.AdventOfCode2021.Day3
     /// 
     /// Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together.
     /// What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
+    /// </summary>
     public class BinaryDiagnostic
     {
         public int Diagnose(IEnumerable<string> report)
         {
-            if (report == null || !report.Any())
+            if (!report.Any())
             {
                 return 0;
             }
@@ -124,7 +126,7 @@ namespace RFI.AdventOfCode2021.Day3
 
         public int Diagnose2(IEnumerable<string> report)
         {
-            if (report == null || !report.Any())
+            if (!report.Any())
             {
                 return 0;
             }
@@ -152,7 +154,7 @@ namespace RFI.AdventOfCode2021.Day3
 
         public int GetLifeSupportRating(IEnumerable<string> samples)
         {
-            if (samples == null || !samples.Any())
+            if (!samples.Any())
             {
                 return 0;
             }

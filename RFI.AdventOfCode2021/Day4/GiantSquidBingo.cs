@@ -1,5 +1,6 @@
 ﻿namespace RFI.AdventOfCode2021.Day4
 {
+    /// <summary>
     /// --- Day 4: Giant Squid ---
     /// 
     /// You're already almost 1.5km (almost a mile) below the surface of the ocean, already so deep that you can't see any sunlight.What you can see, however, 
@@ -70,6 +71,7 @@
     /// If you were to keep playing until this point, the second board would have a sum of unmarked numbers equal to 148 for a final score of 148 * 13 = 1924.
     /// 
     /// Figure out which board will win last.Once it wins, what would its final score be?
+    /// </summary>
     public class GiantSquidBingo
     {
         public int Play(IEnumerable<string> gameConfiguration)
@@ -99,7 +101,7 @@
                 var boardsWithBingo = bingoBoards.Where(bb => bb.IsBingo()).ToList();
                 if (boardsWithBingo.Any())
                 {
-                    if (boardsWithBingo.Count() < bingoBoards.Count())
+                    if (boardsWithBingo.Count < bingoBoards.Count)
                     {
                         boardsWithBingo.ForEach(b => bingoBoards.Remove(b));
                     }
@@ -142,11 +144,11 @@
 
         private int[,] GetBingoBoardNumbers(List<int[]> boardNumbers)
         {
-            var bn = new int[boardNumbers.Count, boardNumbers[0].Count()];
+            var bn = new int[boardNumbers.Count, boardNumbers[0].Length];
 
             for (int x = 0; x < boardNumbers.Count; x++)
             {
-                for (int y = 0; y < boardNumbers[x].Count(); y++)
+                for (int y = 0; y < boardNumbers[x].Length; y++)
                 {
                     bn[x, y] = boardNumbers[x][y];
                 }

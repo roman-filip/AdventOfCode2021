@@ -1,5 +1,6 @@
 ﻿namespace RFI.AdventOfCode2021.Day2
 {
+    /// <summary>
     /// Now, you need to figure out how to pilot this thing.
     /// It seems like the submarine can take a series of commands like forward 1, down 2, or up 3:
     ///     forward X increases the horizontal position by X units.
@@ -54,6 +55,7 @@
     /// 
     /// Using this new interpretation of the commands, calculate the horizontal position and depth you would have after following the planned course.
     /// What do you get if you multiply your final horizontal position by your final depth?
+    /// </summary>
     public class Submarine
     {
         private enum CommandType
@@ -74,13 +76,10 @@
                 {CommandType.Up, cmdValue => depth -= cmdValue }
             };
 
-            if (commands != null)
+            foreach (var command in commands)
             {
-                foreach (var command in commands)
-                {
-                    (CommandType cmdType, int cmdValue) = ParseCommand(command);
-                    cmdImplementation[cmdType].Invoke(cmdValue);
-                }
+                (CommandType cmdType, int cmdValue) = ParseCommand(command);
+                cmdImplementation[cmdType].Invoke(cmdValue);
             }
 
             return depth * horizontalPosition;
@@ -98,13 +97,10 @@
                 {CommandType.Up, cmdValue => aim -= cmdValue }
             };
 
-            if (commands != null)
+            foreach (var command in commands)
             {
-                foreach (var command in commands)
-                {
-                    (CommandType cmdType, int cmdValue) = ParseCommand(command);
-                    cmdImplementation[cmdType].Invoke(cmdValue);
-                }
+                (CommandType cmdType, int cmdValue) = ParseCommand(command);
+                cmdImplementation[cmdType].Invoke(cmdValue);
             }
 
             return depth * horizontalPosition;

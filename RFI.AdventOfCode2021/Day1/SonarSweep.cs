@@ -73,7 +73,7 @@
         {
             var count = 0;
 
-            if (measurements?.Count() > 1)
+            if (measurements.Count() > 1)
             {
                 var m = measurements.ToArray();
                 for (int i = 0; i < m.Length - 1; i++)
@@ -92,7 +92,7 @@
         {
             var count = 0;
 
-            if (measurements?.Count() > 1)
+            if (measurements.Count() > 1)
             {
                 var prevSum = int.MaxValue;
                 var m = measurements.ToArray();

@@ -1,5 +1,6 @@
 ﻿namespace RFI.AdventOfCode2021.Day5
 {
+    /// <summary>
     /// --- Day 5: Hydrothermal Venture ---
     /// 
     /// You come across a field of hydrothermal vents on the ocean floor! These vents constantly produce large, opaque clouds, 
@@ -71,6 +72,7 @@
     /// with a 2 or larger - now a total of 12 points.
     /// 
     /// Consider all of the lines.At how many points do at least two lines overlap?
+    /// </summary>
     public class HydrothermalVenture
     {
         public int GetOverlapsCount(IEnumerable<string> ventLines)

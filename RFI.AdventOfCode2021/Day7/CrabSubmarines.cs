@@ -1,5 +1,6 @@
 ﻿namespace RFI.AdventOfCode2021.Day7
 {
+    /// <summary>
     /// --- Day 7: The Treachery of Whales ---
     /// 
     /// A giant whale has decided your submarine is its next meal, and it's much faster than you are. There's nowhere to run!
@@ -59,6 +60,7 @@
     /// This costs a total of 168 fuel.This is the new cheapest possible outcome; the old alignment position(2) now costs 206 fuel instead.
     /// 
     /// Determine the horizontal position that the crabs can align to using the least fuel possible so they can make you an escape route! How much fuel must they spend to align to that position?
+    /// </summary>
     public class CrabSubmarines
     {
         public int GetLeastFuel(string crabSubmarines)
