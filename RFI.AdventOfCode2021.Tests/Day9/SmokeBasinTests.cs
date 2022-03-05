@@ -17,5 +17,11 @@ namespace RFI.AdventOfCode2021.Tests.Day9
         [DataRow(518, REAL_INPUT)]
         public void ComputeRiskLevelTest(int expectedCount, string file)
             => Assert.AreEqual(expectedCount, _smokeBasin.ComputeRiskLevel(File.ReadAllLines(file)));
+
+        [TestMethod]
+        [DataRow(1134, TRAINING_INPUT)]
+        [DataRow(949905, REAL_INPUT)]
+        public void ComputeLargestBasinsTest(int expectedCount, string file)
+            => Assert.AreEqual(expectedCount, _smokeBasin.ComputeLargestBasins(File.ReadAllLines(file)));
     }
 }

@@ -26,9 +26,58 @@
     /// of all low points in the heightmap is therefore 15.
     /// 
     /// Find all of the low points on your heightmap.What is the sum of the risk levels of all low points on your heightmap?
+    /// 
+    /// --- Part Two ---
+    /// 
+    /// Next, you need to find the largest basins so you know what areas are most important to avoid.
+    /// 
+    /// A basin is all locations that eventually flow downward to a single low point.Therefore, every low point has a basin, although some basins are very small.
+    /// Locations of height 9 do not count as being in any basin, and all other locations will always be part of exactly one basin.
+    /// 
+    /// The size of a basin is the number of locations within the basin, including the low point.The example above has four basins.
+    /// 
+    /// The top-left basin, size 3:
+    /// 2199943210
+    /// 3987894921
+    /// 9856789892
+    /// 8767896789
+    /// 9899965678
+    /// 
+    /// The top-right basin, size 9:
+    /// 2199943210
+    /// 3987894921
+    /// 9856789892
+    /// 8767896789
+    /// 9899965678
+    /// 
+    /// The middle basin, size 14:
+    /// 2199943210
+    /// 3987894921
+    /// 9856789892
+    /// 8767896789
+    /// 9899965678
+    /// 
+    /// The bottom-right basin, size 9:
+    /// 2199943210
+    /// 3987894921
+    /// 9856789892
+    /// 8767896789
+    /// 9899965678
+    /// 
+    /// Find the three largest basins and multiply their sizes together. In the above example, this is 9 * 14 * 9 = 1134.
+    /// 
+    /// What do you get if you multiply together the sizes of the three largest basins?
     /// </summary>
     public class SmokeBasin
     {
+        private enum Direction
+        {
+            Left,
+            Right,
+            Up,
+            Down
+        }
+
         private string[] _heightmap = Array.Empty<string>();
         private int _rowIndex;
         private int _colIndex;
@@ -52,6 +101,28 @@
             return lowPoints.Sum() + lowPoints.Count;
         }
 
+        public int ComputeLargestBasins(string[] heightmap)
+        {
+            _heightmap = heightmap;
+            var basinsSize = new List<int>();
+
+            for (_rowIndex = 0; _rowIndex < _heightmap.Length; _rowIndex++)
+            {
+                for (_colIndex = 0; _colIndex < _heightmap[_rowIndex].Length; _colIndex++)
+                {
+                    if (IsLowPoint())
+                    {
+                        _basinPoints.Clear();
+                        FillBasinPoints(_rowIndex, _colIndex, Direction.Left);
+                        basinsSize.Add(_basinPoints.Count);
+                    }
+                }
+            }
+
+            var sortedBasins = basinsSize.OrderByDescending(b => b).ToArray();
+            return sortedBasins[0] * sortedBasins[1] * sortedBasins[2];
+        }
+
         private bool IsLowPoint()
         {
             var c = _heightmap[_rowIndex][_colIndex];
@@ -63,5 +134,49 @@
             => row >= 0 && row < _heightmap.Length && col >= 0 && col < _heightmap[row].Length
                 ? _heightmap[row][col]
                 : 'A';
+
+
+        private HashSet<(int, int)> _basinPoints = new();
+        private HashSet<(int, int, Direction)> _visitedPoints = new();
+
+        private void FillBasinPoints(int row, int col, Direction direction)
+        {
+            if (!(row >= 0 && row < _heightmap.Length && col >= 0 && col < _heightmap[row].Length))
+            {
+                return;
+            }
+
+            if (_visitedPoints.Contains((row, col, direction)))
+            {
+                return;
+            }
+
+            _visitedPoints.Add((row, col, direction));
+
+            if (_heightmap[row][col] != '9')
+            {
+                _basinPoints.Add((row, col));
+
+                if (direction != Direction.Left)
+                {
+                    FillBasinPoints(row, col + 1, Direction.Right);
+                }
+
+                if (direction != Direction.Right)
+                {
+                    FillBasinPoints(row, col - 1, Direction.Left);
+                }
+
+                if (direction != Direction.Up)
+                {
+                    FillBasinPoints(row + 1, col, Direction.Down);
+                }
+
+                if (direction != Direction.Down)
+                {
+                    FillBasinPoints(row - 1, col, Direction.Up);
+                }
+            }
+        }
     }
 }
