@@ -19,28 +19,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Day4\RealInput.txt">
+    <None Update="Day04\RealInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Day4\TrainingInput.txt">
+    <None Update="Day04\TrainingInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Day5\RealInput.txt">
+    <None Update="Day05\RealInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Day5\TrainingInput.txt">
+    <None Update="Day05\TrainingInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Day8\RealInput.txt">
+    <None Update="Day08\RealInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Day8\TrainingInput.txt">
+    <None Update="Day08\TrainingInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Day9\RealInput.txt">
+    <None Update="Day09\RealInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Day9\TrainingInput.txt">
+    <None Update="Day09\TrainingInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
