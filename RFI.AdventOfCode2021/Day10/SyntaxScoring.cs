@@ -56,9 +56,52 @@
     /// and an illegal > was found once (25137 points). So, the total syntax error score for this file is 6+57+1197+25137 = 26397 points!
     /// 
     /// Find the first illegal character in each corrupted line of the navigation subsystem. What is the total syntax error score for those errors?
+    /// 
+    /// --- Part Two ---
+    /// 
+    /// Now, discard the corrupted lines. The remaining lines are incomplete.
+    /// Incomplete lines don't have any incorrect characters - instead, they're missing some closing characters at the end of the line. To repair the navigation subsystem, 
+    /// you just need to figure out the sequence of closing characters that complete all open chunks in the line.
+    /// 
+    /// You can only use closing characters (), ], }, or >), and you must add them in the correct order so that only legal pairs are formed and all chunks end up closed.
+    /// 
+    /// In the example above, there are five incomplete lines:
+    ///     [({(<(())[]>[[{[]{<()<>> - Complete by adding }}]])})].
+    ///     [(()[<>])]({[<{<<[]>>( - Complete by adding )}>]}).
+    ///     (((({<>}<{<{<>}{[]{[]{} - Complete by adding }}>}>)))).
+    ///     {<[[]]>}<{[{[{[]{()[[[] - Complete by adding ]]}}]}]}>.
+    ///     <{([{{}}[<[[[<>{}]]]>[]] - Complete by adding ])}>.
+    /// 
+    /// Did you know that autocomplete tools also have contests? It's true! The score is determined by considering the completion string character-by-character. 
+    /// Start with a total score of 0. Then, for each character, multiply the total score by 5 and then increase the total score by the point value given for the character in the following table:
+    ///     ): 1 point.
+    ///     ]: 2 points.
+    ///     }: 3 points.
+    ///     >: 4 points.
+    /// 
+    /// So, the last completion string above - ])}> - would be scored as follows:
+    ///     Start with a total score of 0.
+    ///     Multiply the total score by 5 to get 0, then add the value of ] (2) to get a new total score of 2.
+    ///     Multiply the total score by 5 to get 10, then add the value of ) (1) to get a new total score of 11.
+    ///     Multiply the total score by 5 to get 55, then add the value of } (3) to get a new total score of 58.
+    ///     Multiply the total score by 5 to get 290, then add the value of > (4) to get a new total score of 294.
+    /// 
+    /// The five lines' completion strings have total scores as follows:
+    ///     }}]])})] - 288957 total points.
+    ///     )}>]}) - 5566 total points.
+    ///     }}>}>)))) - 1480781 total points.
+    ///     ]]}}]}]}> - 995444 total points.
+    ///     ])}> - 294 total points.
+    /// 
+    /// Autocomplete tools are an odd bunch: the winner is found by sorting all of the scores and then taking the middle score. (There will always be an odd number of scores to consider.) 
+    /// In this example, the middle score is 288957 because there are the same number of scores smaller and larger than it.
+    /// 
+    /// Find the completion string for each incomplete line, score the completion strings, and sort the scores. What is the middle score?
     /// </summary>
     public class SyntaxScoring
     {
+        record Weight(int SyntaxError, int AutoComplete);
+
         private readonly Dictionary<char, char> _pairs = new()
         {
             { '(', ')' },
@@ -67,12 +110,12 @@
             { '<', '>' }
         };
 
-        private readonly Dictionary<char, int> _weights = new()
+        private readonly Dictionary<char, Weight> _weights = new()
         {
-            { ')', 3 },
-            { ']', 57 },
-            { '}', 1197 },
-            { '>', 25137 },
+            { ')', new Weight(3, 1) },
+            { ']', new Weight(57, 2) },
+            { '}', new Weight(1197, 3) },
+            { '>', new Weight(25137, 4) },
         };
 
         public int ComputeSyntaxErrorScore(string[] lines)
@@ -81,17 +124,40 @@
 
             foreach (var line in lines)
             {
-                var ch = GetInvalidCharacter(line);
+                (var ch, _) = ParseLine(line);
                 if (ch != char.MinValue)
                 {
-                    score += _weights[ch];
+                    score += _weights[ch].SyntaxError;
                 }
             }
 
             return score;
         }
 
-        private char GetInvalidCharacter(string line)
+        public long ComputeAutocompleteScore(string[] lines)
+        {
+            var scores = new List<long>();
+
+            foreach (var line in lines)
+            {
+                (_, var autocomplete) = ParseLine(line);
+                if (autocomplete.Any())
+                {
+                    long score = 0;
+                    while (autocomplete.TryPop(out char ch))
+                    {
+                        score = score * 5 + _weights[_pairs[ch]].AutoComplete;
+                    }
+                    scores.Add(score);
+                }
+            }
+
+            return scores
+                .OrderBy(s => s)
+                .ElementAt((int)(scores.Count / 2.0 - 0.5));
+        }
+
+        private (char invalidChar, Stack<char> autocomplete) ParseLine(string line)
         {
             var stack = new Stack<char>();
             foreach (var ch in line)
@@ -104,12 +170,12 @@
                 {
                     if (!stack.TryPop(out char c) || _pairs[c] != ch)
                     {
-                        return ch;
+                        return (ch, new Stack<char>());  // Input is corrupted
                     }
                 }
             }
 
-            return char.MinValue;
+            return (char.MinValue, stack);  // Input is incomplete
         }
 
         private bool IsOpeningCharacter(char ch)

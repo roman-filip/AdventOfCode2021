@@ -17,5 +17,11 @@ namespace RFI.AdventOfCode2021.Tests.Day10
         [DataRow(389589, REAL_INPUT)]
         public void ComputeSyntaxErrorScoreTest(int expectedCount, string file)
             => Assert.AreEqual(expectedCount, _syntaxScoring.ComputeSyntaxErrorScore(File.ReadAllLines(file)));
+
+        [TestMethod]
+        [DataRow(288957, TRAINING_INPUT)]
+        [DataRow(1190420163, REAL_INPUT)]
+        public void ComputeAutocompleteScoreTest(int expectedCount, string file)
+            => Assert.AreEqual(expectedCount, _syntaxScoring.ComputeAutocompleteScore(File.ReadAllLines(file)));
     }
 }
